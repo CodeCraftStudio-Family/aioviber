@@ -1,8 +1,10 @@
 import asyncio
 
 from aioviber import Bot, BotConfiguration, Dispatcher
+from aioviber.types import Message
 from viberbot.api.messages import TextMessage
 from viberbot.api.viber_requests import ViberMessageRequest, ViberConversationStartedRequest
+
 
 bot = Bot(BotConfiguration(
     auth_token='...',
@@ -13,8 +15,9 @@ bot = Bot(BotConfiguration(
 dp = Dispatcher(bot=bot)
 
 @dp.messages()
-async def echo(message: ViberMessageRequest):
-    bot.send_messages(message.sender.id, [message.message])
+async def echo(message: Message):
+    message.copy_to(message.sender.id)
+
 
 @dp.conversation_started()
 async def start(started: ViberConversationStartedRequest):
@@ -27,8 +30,7 @@ async def start(started: ViberConversationStartedRequest):
 async def main():
 
     await dp.start_webhook(
-        path='/viber/decorptest/update',
-        domain='...'
+        path='/viber/decorptest/update'
     )
 
 asyncio.run(main())

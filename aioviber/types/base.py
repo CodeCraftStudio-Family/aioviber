@@ -1,6 +1,5 @@
 from abc import abstractmethod
 
-
 class ViberObject:
     event_type: str
     timestamp: int

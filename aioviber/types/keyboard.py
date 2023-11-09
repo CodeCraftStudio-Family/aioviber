@@ -24,10 +24,22 @@ class Keyboard:
 
 
 class KeyboardButton:
+    column: int
+    row: int
+    bg_color: str = None
+    bg_media_type: str = None
+    bg_media: str = None
+    bg_loop: bool = True
     action_type: str = None
+    open_url_type: str = None
+    internal_browser: Any = None
+    image: str
     action_body: str = None
+    text_v_align: str = 'middle'
+    text_h_align: str = 'center'
     text: str
     text_size: str = None
+    
 
     def __init__(self, *, text: str, text_size: str = None, action_body: str = None, action_type: str = 'reply'):
         self.text = text
