@@ -41,6 +41,7 @@ class Dispatcher(Router):
         if data.get('event') == 'webhook': return Response()
 
         data_text = await request.text()
+        print(data_text)
         if not self.bot.verify_signature(data_text.encode(), request.headers.get('X-Viber-Content-Signature')):
             return Response(status=403)
 
@@ -49,15 +50,15 @@ class Dispatcher(Router):
         
         # дописати
         try:
-            print(event.sender.id)
-
             storage_key = StorageKey(
-                sender_id=event.sender.id,
+                user_id=event.user.id,
                 chat_id=event.chat_id
             )
             state = FSMcontext(storage_key, self.storage)
         except Exception:
             state = None
+
+        print(state)
 
         await self._trigging(viber_request.event_type, event, state=state, **self.kwargs)
         

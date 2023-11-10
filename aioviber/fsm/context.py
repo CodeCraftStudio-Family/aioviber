@@ -21,3 +21,7 @@ class FSMcontext:
 
     async def update_data(self, data: dict[str, Any]):
         return await self._storage.update_data(self._storage_key, data)
+    
+    async def clear(self):
+        await self.set_state(None)
+        await self.set_data({})

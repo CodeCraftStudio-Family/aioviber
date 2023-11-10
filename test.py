@@ -2,7 +2,7 @@ import asyncio
 
 from aioviber import Bot, BotConfiguration, Dispatcher
 from aioviber.types import Message
-from aioviber.filters import TextFilter
+from aioviber.filters import TextFilter, StateFilter
 from aioviber.fsm.context import FSMcontext
 
 from viberbot.api.messages import TextMessage
@@ -25,9 +25,12 @@ async def echo(message: Message, state: FSMcontext):
         "Хай, круто !\nTest"
     )
 
-@dp.messages()
-async def echo(message: Message):
-    message.copy_to(message.sender.id)
+@dp.messages(StateFilter('new_state'))
+async def echo(message: Message, state: FSMcontext):
+    message.copy_to(message.user.id)
+
+    await state.clear()
+
 
 
 @dp.conversation_started()

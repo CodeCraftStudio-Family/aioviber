@@ -15,8 +15,8 @@ class ViberObject:
         
         self.event_type = request_dict['event']
         self.timestamp = request_dict['timestamp']
-        self.chat_hostname = request_dict['chat_hostname']
+        self.chat_hostname = request_dict.get('chat_hostname')
         self.message_token = request_dict.get('message_token')
-        self.silent = request_dict['silent']
+        self.silent = request_dict.get('silent')
         
         return self

@@ -21,7 +21,7 @@ from .keyboard import Keyboard
 class Message(ViberObject):
     text: str = None
     content_type: str
-    sender: User
+    user: User
     message_token: str
     chat_id = None
     reply_type = None
@@ -45,7 +45,7 @@ class Message(ViberObject):
         message = request_dict.get('message', {})
         super(Message, self).from_dict(request_dict)
         self.content_type = message['type']
-        self.sender = User().from_dict(request_dict.get('sender', {}))
+        self.user = User().from_dict(request_dict.get('sender', {}))
 
         match self.content_type: 
             case "text":
@@ -180,13 +180,13 @@ class Message(ViberObject):
 
     def answer(self, text: str, keyboard: Keyboard = None):
         self.bot.send_messages(
-            self.sender.id,
+            self.user.id,
             [TextMessage(text=text, keyboard=keyboard)]
         )
     
     def answer_picture(self, text: str, media: Any, keyboard: Keyboard = None):
         self.bot.send_messages(
-            self.sender.id,
+            self.user.id,
             [PictureMessage(text=text, media=media, keyboard=keyboard)]
         )
     

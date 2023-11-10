@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class StorageKey:
-    sender_id: str
+    user_id: str
     chat_id: str
 
 class BaseStorage(ABC):

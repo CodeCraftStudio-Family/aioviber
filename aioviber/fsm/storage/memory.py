@@ -27,4 +27,4 @@ class MemoryStorage(BaseStorage):
         self.storage[key].data = data.copy()
 
     async def close(self) -> None:
-        return
+        pass
