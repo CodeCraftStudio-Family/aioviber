@@ -2,17 +2,28 @@ import asyncio
 
 from aioviber import Bot, BotConfiguration, Dispatcher
 from aioviber.types import Message
+from aioviber.filters import TextFilter
+from aioviber.fsm.context import FSMcontext
+
 from viberbot.api.messages import TextMessage
-from viberbot.api.viber_requests import ViberMessageRequest, ViberConversationStartedRequest
+from viberbot.api.viber_requests import ViberConversationStartedRequest
 
 
 bot = Bot(BotConfiguration(
     auth_token='...',
-    name='DE corp1 test bot',
+    name='...',
     avatar=''
 ))
 
 dp = Dispatcher(bot=bot)
+
+
+@dp.messages(TextFilter('test'))
+async def echo(message: Message, state: FSMcontext):
+    await state.set_state('new_state')
+    message.answer(
+        "Хай, круто !\nTest"
+    )
 
 @dp.messages()
 async def echo(message: Message):
@@ -28,7 +39,6 @@ async def start(started: ViberConversationStartedRequest):
 
 
 async def main():
-
     await dp.start_webhook(
         path='/viber/decorptest/update'
     )

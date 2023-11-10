@@ -1,13 +1,13 @@
 from typing import Any, DefaultDict
 from collections import defaultdict
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from .base import BaseStorage, StorageKey
 
 
 @dataclass
 class MemoryStorageRecord:
-    data: dict[str, Any] = {}
+    data: dict[str, Any] = field(default_factory=dict)
     state: str = None
 
 class MemoryStorage(BaseStorage):

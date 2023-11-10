@@ -11,7 +11,8 @@ from typing import Any
 
 from .router import Router
 from aioviber.types import Message, parse_object
-from aioviber.fsm.storage import MemoryStorage, BaseStorage, StorageKey
+from aioviber.fsm.storage import MemoryStorage, StorageKey
+from aioviber.fsm.context import FSMcontext
 
 
 class Dispatcher(Router):
@@ -20,7 +21,7 @@ class Dispatcher(Router):
             self,
             *,
             bot: Api,
-            storage: BaseStorage = None,
+            storage: Any = None,
             fsm_strategy: Any = None,
             disable_fsm: bool = False,
             name: str = None,
@@ -40,16 +41,25 @@ class Dispatcher(Router):
         if data.get('event') == 'webhook': return Response()
 
         data_text = await request.text()
-        print(data_text)
         if not self.bot.verify_signature(data_text.encode(), request.headers.get('X-Viber-Content-Signature')):
             return Response(status=403)
 
         viber_request: ViberRequest = self.bot.parse_request(data_text)
         event = parse_object(data, self.bot)
         
-        state: 
+        # дописати
+        try:
+            print(event.sender.id)
 
-        await self._trigging(viber_request.event_type, event, **self.kwargs)
+            storage_key = StorageKey(
+                sender_id=event.sender.id,
+                chat_id=event.chat_id
+            )
+            state = FSMcontext(storage_key, self.storage)
+        except Exception:
+            state = None
+
+        await self._trigging(viber_request.event_type, event, state=state, **self.kwargs)
         
         return Response(status=200)
 

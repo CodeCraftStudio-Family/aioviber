@@ -1,4 +1,5 @@
 from typing import Any, Callable
+from aioviber.filters import BaseFilter
 from .handler import CallbackType, HandlerObject
 
 
@@ -20,13 +21,13 @@ class EventHandler:
             
             if is_called: break
 
-    def __call__(self) -> Callable[[CallbackType], CallbackType]:
+    def __call__(self, *filters: BaseFilter, **kwargs) -> Callable[[CallbackType], CallbackType]:
         """
         Decorator for registering event handlers
         """
 
         def wrapper(callback: CallbackType) -> CallbackType:
-            self.register(callback)
+            self.register(callback, filters)
             return callback
 
         return wrapper

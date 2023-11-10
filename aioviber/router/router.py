@@ -1,11 +1,12 @@
 from .event import EventHandler
 
+
 class Router:
     sub_routers: list["Router"] = []
     _parent_router = None
 
     
-    def __init__(self, *, name: str = None):
+    def __init__(self, name: str = None):
         self.seen = EventHandler()
         self.failed = EventHandler()
         self.messages = EventHandler()
