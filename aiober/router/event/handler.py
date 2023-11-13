@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Any, Callable
 
-from aioviber.filters import BaseFilter
+from aiober.filters import BaseFilter
 
 
 CallbackType = Callable[..., Any]

@@ -1,6 +1,6 @@
 from typing import Any
-from aioviber.types import Message, Seen
-from aioviber.fsm.context import FSMcontext
+from aiober.types import Message, Seen
+from aiober.fsm.context import FSMcontext
 
 from .base import BaseFilter
 

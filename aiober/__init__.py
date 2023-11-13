@@ -1,6 +1,6 @@
 from .router import (
     Router,
-    Dispatcher,
-    Bot,
-    BotConfiguration
+    Dispatcher
 )
+
+from aiober.client import Bot

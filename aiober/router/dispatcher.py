@@ -10,9 +10,9 @@ from viberbot.api.bot_configuration import BotConfiguration
 from typing import Any
 
 from .router import Router
-from aioviber.types import Message, parse_object
-from aioviber.fsm.storage import MemoryStorage, StorageKey
-from aioviber.fsm.context import FSMcontext
+from aiober.types import Message, parse_object
+from aiober.fsm.storage import MemoryStorage, StorageKey
+from aiober.fsm.context import FSMcontext
 
 
 class Dispatcher(Router):
@@ -41,11 +41,14 @@ class Dispatcher(Router):
         if data.get('event') == 'webhook': return Response()
 
         data_text = await request.text()
-        if not self.bot.verify_signature(data_text.encode(), request.headers.get('X-Viber-Content-Signature')):
-            return Response(status=403)
+        #if not self.bot.verify_signature(data_text.encode(), request.headers.get('X-Viber-Content-Signature')):
+        #    return Response(status=403)
+        
+        print(data_text)
 
-        viber_request: ViberRequest = self.bot.parse_request(data_text)
+        #viber_request: ViberRequest = self.bot.parse_request(data_text)
         event = parse_object(data, self.bot)
+        print(event)
         
         # дописати
         try:
@@ -57,9 +60,7 @@ class Dispatcher(Router):
         except Exception:
             state = None
 
-        print(state)
-
-        await self._trigging(viber_request.event_type, event, state=state, **self.kwargs)
+        await self._trigging(data.get('event'), event, state=state, **self.kwargs)
         
         return Response(status=200)
 

@@ -1,4 +1,4 @@
-from aioviber.types import Message
+from aiober.types import Message
 
 from .base import BaseFilter
 

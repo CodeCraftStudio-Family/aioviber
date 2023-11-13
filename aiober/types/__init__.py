@@ -1,3 +1,4 @@
+from pydantic import parse_obj_as
 from .base import ViberObject
 
 from .massage import Message
@@ -19,6 +20,6 @@ def parse_object(request_data: dict, bot):
     event: str = request_data.get('event')
 
     kwargs = {'bot': bot} if event == 'message' else {}
-    
-    return _object[event](**kwargs).from_dict(request_data) if event in _object else None
+
+    return parse_obj_as(_object[event], request_data | kwargs | request_data[event]) if event in _object else None
 

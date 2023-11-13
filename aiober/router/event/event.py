@@ -1,5 +1,5 @@
 from typing import Any, Callable
-from aioviber.filters import BaseFilter
+from aiober.filters import BaseFilter
 from .handler import CallbackType, HandlerObject
 
 
