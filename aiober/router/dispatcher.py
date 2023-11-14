@@ -40,16 +40,13 @@ class Dispatcher(Router):
 
         if data.get('event') == 'webhook': return Response()
 
-        data_text = await request.text()
         #if not self.bot.verify_signature(data_text.encode(), request.headers.get('X-Viber-Content-Signature')):
         #    return Response(status=403)
-        
-        print(data_text)
 
         #viber_request: ViberRequest = self.bot.parse_request(data_text)
+
         event = parse_object(data, self.bot)
-        print(event)
-        
+
         # дописати
         try:
             storage_key = StorageKey(

@@ -1,8 +1,9 @@
+import logging
 from typing import Any, TYPE_CHECKING
+
 from .base import ViberObject
 from .user import User
 from .keyboard import Keyboard
-from aiober.client.bot import Bot
 
 if TYPE_CHECKING:
     from ..methods import SendMessage
@@ -11,7 +12,7 @@ class Message(ViberObject):
     receiver: str = None
     text: str = None
     type: str
-    sender: User
+    sender: User | None
     message_token: int = None
     reply_type: Any = None
 
@@ -20,8 +21,8 @@ class Message(ViberObject):
     file_name: str = None
     size: int = None
     duration: int = None
-    rich_media: Keyboard = None
-    keyboard: Keyboard = None
+    rich_media: Keyboard | None = None
+    keyboard: Keyboard | None = None
 
     lat: float = None
     lon: float = None
@@ -29,19 +30,32 @@ class Message(ViberObject):
     sticker_id: int = None
 
     def model_post_init(self, __context):
-        self.sender = User(**__context.get('sender')) if __context else None
-        self._bot = __context.get('bot') if __context else None
+
+        self.keyboard = (
+            Keyboard(**__context.get('keyboard'))
+            if __context
+            else self.keyboard
+        )
+
+        self.sender = (
+            User(**__context.get('sender'))
+            if __context
+            else self.sender
+        )
+
+        super().model_post_init(__context)
     
     def answer(self, text: str, keyboard: Keyboard = None):
-        from ..methods import SendMessage
+        from aiober.methods import SendMessage
 
         return SendMessage(
-            chat_id=self.receiver,
+            receiver=self.sender.id,
+            type=self.type,
             text=text,
             media=self.media,
             thumbnail=self.media,
             rich_media=self.rich_media,
-            keyboard=keyboard.to_json(),
+            keyboard=keyboard,
             lat=None,
             lon=None,
             sticker_id=None
@@ -54,9 +68,18 @@ class Message(ViberObject):
     #    )
         ...
 
-    def copy_to(self, chat_id: str):
-    #    self._bot.send_messages(
-    #        chat_id,
-    #        [self.to_viber_object()]
-    #    )
-        ...
+    def copy_to(self, chat_id: str, keyboard: Keyboard = None):
+        from aiober.methods import SendMessage
+        
+        return SendMessage(
+            receiver=chat_id,
+            type=self.type,
+            text=self.text,
+            media=self.media,
+            thumbnail=self.media,
+            rich_media=self.rich_media,
+            keyboard=keyboard,
+            lat=self.lat,
+            lon=self.lon,
+            sticker_id=self.sticker_id
+        ).as_(self._bot)

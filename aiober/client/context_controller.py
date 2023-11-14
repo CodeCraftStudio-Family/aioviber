@@ -10,8 +10,6 @@ if TYPE_CHECKING:
 class BotContextController(BaseModel):
     _bot: Optional["Bot"] = PrivateAttr()
 
-    def model_post_init(self, __context: Any) -> None:
-        self._bot = __context.get('bot') if __context else None
 
     def as_(self, bot: Optional["Bot"]) -> Self:
         self._bot = bot

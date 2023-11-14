@@ -18,18 +18,11 @@ dp = Dispatcher(bot=bot)
 
 @dp.messages(TextFilter('test'))
 async def echo(message: Message, state: FSMcontext):
-    await message.answer('new test))')
+    await message.answer('new test))', Keyboard(Buttons=[KeyboardButton(Text='тест')]))
     
-
-
-@dp.conversation_started()
-async def start(started: ConversationStarted):
-    """bot.send_messages(
-        started.user.id,
-        TextMessage(
-            text=f'Ласкаво просимо, {started.user.name}!\n'
-        )
-    )"""
+@dp.messages()
+async def echo(message: Message, state: FSMcontext):
+    await message.copy_to(message.sender.id)
 
 
 async def main():

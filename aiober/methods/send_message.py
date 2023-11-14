@@ -1,7 +1,8 @@
 from .base import ViberMethod
 
-from ..types import Message, Keyboard
 from .methods import SEND_MESSAGE
+
+from ..types import Message, Keyboard
 
 
 class SendMessage(ViberMethod[Message]):
@@ -9,23 +10,23 @@ class SendMessage(ViberMethod[Message]):
     __returing__   = Message
     __api_method__ = SEND_MESSAGE
 
-    receiver: int = None
-    type: str = None
-    text: str = None
-    media: str = None
-    thumbnail: str = None
-    file_name: str = None
-    size: int = None
-    duration: int = None
-    rich_media: Keyboard = None
-    keyboard: Keyboard = None
-    lat: float = None
-    lon: float = None
-    sticker_id: int = None
+    receiver: str = None
+    type: str | None = None
+    text: str | None = None
+    media: str | None = None
+    thumbnail: str | None = None
+    file_name: str | None = None
+    size: int | None = None
+    duration: int | None = None
+    rich_media: Keyboard | None = None
+    keyboard: Keyboard | None = None
+    lat: float | None = None
+    lon: float | None = None
+    sticker_id: int | None = None
 
     def __init__(
             self,
-            receiver: int,
+            receiver: str,
             type: str,
             text: str,
             media: str = None,
@@ -49,7 +50,7 @@ class SendMessage(ViberMethod[Message]):
             size=size,
             duration=duration,
             rich_media=rich_media,
-            keyboard=keyboard,
+            keyboard=keyboard.dict() if keyboard is not None else None,
             lat=lat,
             lon=lon,
             sticker_id=sticker_id

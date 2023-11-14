@@ -1,4 +1,5 @@
 import json
+from pydantic import parse_obj_as
 from abc import ABC, abstractmethod
 from typing import Any
 
@@ -25,9 +26,11 @@ class BaseSession(ABC):
         except Exception as E:
             raise UnicodeDecodeError("failed to decode object")
 
-        response = Response().model_validate(json_data, context={"bot": bot})
+        print(json_data)
 
-        if 200 < status_code < 220:
+        response = parse_obj_as(Response, json_data)
+
+        if 200 <= status_code <= 220:
             return response
         
         raise RuntimeError(f'status code {status_code}')

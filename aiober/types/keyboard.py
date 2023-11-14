@@ -1,82 +1,47 @@
-from typing import Any
-from dataclasses import dataclass
+from typing import Any, List
+from pydantic import BaseModel
 
-class Keyboard:
-    type: str = 'keyboard'
-    defaultHeight: bool = False
-    buttons: list["KeyboardButton"] = []
-
-    def __init__(self, *, buttons: list["KeyboardButton"]):
-        self.buttons = buttons
-
-    def from_dict(self, request_data: dict):
-        self.type = request_data['Type']
-        self.defaultHeight = request_data['DefaultHeight']
-        self.buttons = request_data['Buttons']
-
-        return self
-
-    def to_json(self):
-        return {
-            "Type":self.type,
-            "DefaultHeight":self.defaultHeight,
-            "Buttons": [
-                button.to_json() for button in self.buttons
-            ]
-        }
-
-@dataclass
-class KeyboardButton:
-    column: int = 6
-    row: int = 1
-    bg_color: str = None
-    bg_media_type: str = None
-    bg_media: str = None
-    bg_media_scale_type: str = None
-    bg_loop: bool = True
-    action_type: str = None
-    open_url_type: str = None
-    open_url_media_type: str = None
-    text_bg_gradient_color: str = None
-    text_should_fit: str = None
+class KeyboardButton(BaseModel):
+    Columns: int = 6
+    Rows: int = 1
+    BgColor: str | None = None
+    BgMediaType: str | None = None
+    BgMedia: str | None = None
+    BgMediaScaleType: str | None = None
+    BgLoop: bool = True
+    ActionType: str | None = None
+    ActionBody: str | None = ''
+    OpenURLType: str | None = None
+    OpenURLMediaType: str | None = None
+    TextBgGradientColor: str | None = None
+    TextShouldFit: str | None = None
     internal_browser: Any = None
     Map: Any = None
-    image: str = None
-    image_scale_type: str = None
-    action_body: str = ''
-    text_v_align: str = 'middle'
-    text_h_align: str = 'center'
-    text_padding: list[int] = None
-    text: str = None
-    text_opacity: int = 100
-    text_size: str = 'regular'
+    Image: str | None = None
+    ImageScaleType: str | None = None
+    TextVAlign: str | None = 'middle'
+    TextHAlign: str | None = 'center'
+    TextPaddings: list[int] = []
+    Text: str | None = None
+    TextOpacity: int = 100
+    TextSize: str | None = 'regular'
+
+class Keyboard(BaseModel):
+    Type: str | None = 'keyboard'
+    DefaultHeight: bool = False
+    Buttons: List["KeyboardButton"] = []
+
+    class Config:
+        arbitrary_types_allowed = True
+
+    def model_post_init(self, __context: Any) -> None:
+        if __context:
+            self.Buttons = [KeyboardButton(**bttn) for bttn in __context.get('Buttons', [])]
     
-
-    def __post_init__(self):
-        pass
-
-    def to_json(self) -> dict[str, Any]:
+    def to_json(self):
         return {
-            "Columns": self.column,
-			"Rows": self.row,
-			"BgColor": self.bg_color,
-			"BgMediaType": self.bg_media_type,
-            "BgMediaScaleType": self.bg_media_scale_type,
-			"BgMedia": self.bg_media,
-			"BgLoop": self.bg_loop,
-			"ActionType": self.action_type,
-			"ActionBody": self.action_body,
-            "OpenURLType": self.open_url_type,
-            "OpenURLMediaType": self.open_url_media_type,
-			"Image": self.image,
-            "ImageScaleType": self.image_scale_type,
-			"Text": self.text,
-            "TextBgGradientColor": self.text_bg_gradient_color,
-            "TextPaddings": self.text_padding,
-			"TextVAlign": self.text_v_align,
-			"TextHAlign": self.text_h_align,
-			"TextOpacity": self.text_opacity,
-			"TextSize": self.text_size,
-            "TextShouldFit": self.text_should_fit,
-            "Map": self.Map
+            'Type': self.Type,
+            'DefaultHeight': self.DefaultHeight,
+            'Buttons': [bttn.dict() for bttn in self.Buttons if bttn]
         }
+
