@@ -10,7 +10,7 @@ from aiober.fsm.context import FSMcontext
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(
-    '51ed73af39e7df6f-464c10cfb2db1331-bb07310377c2c40b'
+    'AUTH-TOKEN'
 )
 
 dp = Dispatcher(bot=bot)
@@ -18,11 +18,24 @@ dp = Dispatcher(bot=bot)
 
 @dp.messages(TextFilter('test'))
 async def echo(message: Message, state: FSMcontext):
+    await state.set_state('test_state')
+    await state.update_data(name='pedik blyt')
+
     await message.answer('new test))', Keyboard(Buttons=[KeyboardButton(Text='тест')]))
     
-@dp.messages()
+@dp.messages(StateFilter('test_state'))
 async def echo(message: Message, state: FSMcontext):
-    await message.copy_to(message.sender.id)
+    _state = await state.get_state()
+    _data = await state.get_data()
+
+    print(_state, _data)
+
+    await state.clear()
+
+    await message.copy_to(
+        message.sender.id,
+        text=f"{message.text} {_data.get('name')}"
+    )
 
 
 async def main():

@@ -50,8 +50,8 @@ class Dispatcher(Router):
         # дописати
         try:
             storage_key = StorageKey(
-                user_id=event.user.id,
-                chat_id=event.chat_id
+                user_id=event.sender.id,
+                chat_id='null'
             )
             state = FSMcontext(storage_key, self.storage)
         except Exception:

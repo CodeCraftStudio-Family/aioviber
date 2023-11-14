@@ -16,11 +16,11 @@ class FSMcontext:
     async def get_data(self) -> dict[str, Any]:
         return await self._storage.get_data(self._storage_key)
     
-    async def set_data(self, data: dict[str, Any]):
-        return await self._storage.set_data(self._storage_key, data)
+    async def set_data(self, data: dict[str, Any] = {}, **kwargs):
+        return await self._storage.set_data(self._storage_key, data | kwargs)
 
-    async def update_data(self, data: dict[str, Any]):
-        return await self._storage.update_data(self._storage_key, data)
+    async def update_data(self, data: dict[str, Any] = {}, **kwargs):
+        return await self._storage.update_data(self._storage_key, data | kwargs)
     
     async def clear(self):
         await self.set_state(None)

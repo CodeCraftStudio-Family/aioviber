@@ -68,13 +68,13 @@ class Message(ViberObject):
     #    )
         ...
 
-    def copy_to(self, chat_id: str, keyboard: Keyboard = None):
+    def copy_to(self, chat_id: str, *, text: str = None, keyboard: Keyboard = None):
         from aiober.methods import SendMessage
         
         return SendMessage(
             receiver=chat_id,
             type=self.type,
-            text=self.text,
+            text=text or self.text,
             media=self.media,
             thumbnail=self.media,
             rich_media=self.rich_media,
