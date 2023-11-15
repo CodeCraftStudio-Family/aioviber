@@ -10,7 +10,7 @@ async**AIO**
 
 ## Let's get started !
 
-# Installing
+### Installing
 Creating a viber bot is easy !
 1. Install the library with `pip install aiober` or using git
 2. From aiober import Bot and Dispatcher to your projects
