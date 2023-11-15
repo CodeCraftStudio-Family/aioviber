@@ -23,7 +23,7 @@ Creating a viber bot is easy !
 
 ## Example
 
-# Simple echo bot
+### Simple echo bot
 ```python
 import asyncio
 
