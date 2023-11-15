@@ -18,7 +18,7 @@ Creating a viber bot is easy !
 4. Make viber bot [here](https://partners.viber.com/account/create-bot-account)
 5. Using ngrok make your address global (for webhooks)
 6. Run your script
-7. Open Postman and make post request to [https://chatapi.viber.com/pa/set_webhook](https://chatapi.viber.com/pa/set_webhook) with data {"url":"https://your-domain/update, "auth_token": "auth-token"} for set webhook to viber bot
+7. Open Postman and make post request to https://chatapi.viber.com/pa/set_webhook with data `{"url":"https://your-domain/update, "auth_token": "auth-token"}`` for set webhook to viber bot
 **Good, webhook is registred !**
 
 ## Example
