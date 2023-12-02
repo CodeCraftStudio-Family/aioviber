@@ -57,8 +57,6 @@ class AiohttpSession(BaseSession):
 
         response = self.check_response(bot, resp.status, raw_result)
 
-        print(response)
-
         return response.status
 
     async def __call__(self, bot, method: ViberMethod[T], timeout: int = None):

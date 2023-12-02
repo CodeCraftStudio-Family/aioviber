@@ -36,20 +36,18 @@ class Dispatcher(Router):
         self.sub_routers = [self]
 
     async def _listen_webhook(self, request: Request):
+        # get json data
         data = await request.json()
+        
+        # response 200 if event is webhook
+        if data.get('event') == 'webhook': return Response(status=200)
 
-        if data.get('event') == 'webhook': return Response()
-
-        #if not self.bot.verify_signature(data_text.encode(), request.headers.get('X-Viber-Content-Signature')):
-        #    return Response(status=403)
-
-        #viber_request: ViberRequest = self.bot.parse_request(data_text)
-
+        # processing data
         event: ViberObject = parse_object(data, self.bot)
 
         start_time = time.time()
 
-        # дописати
+        # get user state
         try:
             storage_key = StorageKey(
                 user_id=event.user.id if event.event in events_uses_user else event.sender.id,
@@ -59,12 +57,14 @@ class Dispatcher(Router):
         except Exception:
             state = None
 
+        # run handler
         handled = await self._trigging(data.get('event'), event, state=state, **self.kwargs)
 
+        # response
         now = time.time()
         dif = round(now - start_time, 2)
 
-        logging.info(f"Update in{' not' if not handled else ''} handled - {dif} ms")
+        logging.info(f"Update is{' not' if not handled else ''} handled - {dif * 100} ms")
         
         return Response(status=200)
 

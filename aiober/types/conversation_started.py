@@ -9,6 +9,8 @@ class ConversationStarted(ViberObject):
     user: User | None = None
     subscribed: bool | None = None
 
+    _bot: Any | None = None
+
     def model_post_init(self, __context):
 
         self.user = (

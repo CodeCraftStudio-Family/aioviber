@@ -34,8 +34,6 @@ _object: dict[str, ViberObject] = {
 def parse_object(request_data: dict, bot):
     event: str = request_data.get('event')
 
-    print(event)
-
     kwargs = {'bot': bot, '_bot': bot}
 
     data: dict = (

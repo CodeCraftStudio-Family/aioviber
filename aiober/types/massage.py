@@ -79,7 +79,7 @@ class Message(ViberObject):
 
     def copy_to(self, chat_id: str, *, text: str = None, keyboard: Keyboard = None):
         from aiober.methods import SendMessage
-        
+
         return SendMessage(
             receiver=chat_id,
             type=self.type,
@@ -92,3 +92,4 @@ class Message(ViberObject):
             lon=self.lon,
             sticker_id=self.sticker_id
         ).as_(self._bot)
+

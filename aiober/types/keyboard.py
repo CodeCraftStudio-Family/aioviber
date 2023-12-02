@@ -1,10 +1,13 @@
 from typing import Any, List
 from pydantic import BaseModel
 
+from .color import WHITE
+
+
 class KeyboardButton(BaseModel):
     Columns: int | None = 6
     Rows: int | None = 1
-    BgColor: str | None = None
+    BgColor: str | None = WHITE
     BgMediaType: str | None = None
     BgMedia: str | None = None
     BgMediaScaleType: str | None = None
